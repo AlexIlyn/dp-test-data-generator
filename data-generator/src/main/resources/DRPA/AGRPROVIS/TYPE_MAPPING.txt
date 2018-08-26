@@ -1,2 +1,0 @@
-agr_collat_crncy_id;asset_pledge_type_id;agr_collat_id;agr_num;host_agr_collat_id;coa_num;cust_id;agr_collat_amt;agr_collat_rub;mkt_price_amt;mkt_crncy_id;mkt_price_rub;open_dt;expiration_dt
-37107;PLEDGE_TYPE;AGR_COLLAT_ID;3746374-232-091;33244867560865;91312810716150000000;CUST_ID;0;0;1695000;37107;1695000;20121018;20171018
