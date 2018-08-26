@@ -1,9 +1,10 @@
-package ru.sbrf.data.generator;
+package ru.sbrf.data.generator.builders;
 
 import csvdata.builder.CSV_TestDataBuilder;
 import csvdata.builder.enums.CaseSubType;
 import csvdata.builder.enums.CaseType;
 import lombok.Getter;
+import ru.sbrf.data.generator.data.SubjectDRPA;
 
 import java.io.IOException;
 
@@ -20,9 +21,6 @@ public class DrpaClientsBuilder {
 
     private CSV_TestDataBuilder dataBuilder;
 
-    @Getter
-    private DRPASubject borrower;
-
     public DrpaClientsBuilder(){
         try {
             this.dataBuilder = new CSV_TestDataBuilder(CaseType.DRPA, CaseSubType.CUST, DRPA_CUST_FILE_NAME);
@@ -30,8 +28,8 @@ public class DrpaClientsBuilder {
             System.out.println(e.getMessage());
         }
     }
-    public void build(DRPASubject borrower){
-        this.borrower = borrower;
+
+    public DrpaClientsBuilder build(SubjectDRPA borrower){
         dataBuilder.buildRandomRecord();
         dataBuilder.setLastRecordFieldValue(CUST_ID, borrower.getCust_id());
         dataBuilder.setLastRecordFieldValue(DOC_NUM, borrower.getDoc_num());
@@ -41,6 +39,9 @@ public class DrpaClientsBuilder {
         dataBuilder.setLastRecordFieldsWithType(FULL_NAME, borrower.getFull_name());
         dataBuilder.setLastRecordFieldsWithType(INN, borrower.getInn());
         dataBuilder.setLastRecordFieldsWithType(ORG_TYPE, borrower.getClientType());
+        return this;
+    }
+    public void generate(){
         try {
             dataBuilder.generate();
         } catch (IOException e) {

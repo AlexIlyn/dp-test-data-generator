@@ -2,7 +2,8 @@ package csvdata.builder.enums.DRPA;
 
 public enum ClientType {
     LEGAL_ENTITY("Организация"),
-    BUSINESS_PERSON_ENTITY("Индивидуальный предприниматель");
+    BUSINESS_PERSON_ENTITY("Индивидуальный предприниматель"),
+    PERSON_ENTITY("Физическое лицо");
 
     private final String text;
 

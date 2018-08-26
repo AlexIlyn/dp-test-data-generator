@@ -1,10 +1,10 @@
-package ru.sbrf.data.generator;
+package ru.sbrf.data.generator.data;
 
 import csvdata.builder.enums.SAPBO.ClientType;
 
-public class SAPBOSubject extends Subject {
+public class SubjectSAPBO extends Subject {
 
-    public SAPBOSubject(String borrowerType) {
+    public SubjectSAPBO(String borrowerType) {
         super(borrowerType);
     }
 

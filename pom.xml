@@ -15,6 +15,7 @@
     <properties>
         <springframework.version>4.3.18.RELEASE</springframework.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <data.generator.version>1.0-SNAPSHOT</data.generator.version>
     </properties>
 
     <build>
@@ -58,5 +59,23 @@
         </dependency>
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>data.pump</groupId>
+                <artifactId>gui</artifactId>
+                <version>${data.generator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>data.pump</groupId>
+                <artifactId>generator</artifactId>
+                <version>${data.generator.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
     
 </project>

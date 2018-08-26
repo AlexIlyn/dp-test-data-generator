@@ -1,2 +1,2 @@
 cust_id;full_name;inn_num;cust_type_cd;host_cust_id;ogrn_num;ogrn_dt;kio_num;crm_cust_id;birth_dt;doc_num;doc_issue_dt;cust_ind_doc_type_id
-CUST_ID;FULL_NAME;INN;CUST_TYPE_CD;5135351430561;;;;;DATE_JOINED;DOC_NUM;DATE_JOINED;16912
+CUST_ID;FULL_NAME;INN;ORG_TYPE;5135351430561;;;;;DATE_JOINED;DOC_NUM;DATE_JOINED;16912

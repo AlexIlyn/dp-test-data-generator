@@ -1,4 +1,4 @@
-package ru.sbrf.data.generator;
+package ru.sbrf.data.generator.data;
 
 import csvdata.builder.RandomValueUtils;
 import csvdata.builder.ValueType;
@@ -28,6 +28,9 @@ public abstract class Subject {
             inn = RandomValueUtils.getRandomNumberOfLength(10);
         } else if(borrowerType.equals(subjectTypeValues[1])){
             full_name = "ИП " + RandomValueUtils.getRandomValueByValueType(ValueType.PERSON_FULL_NAME);
+            inn = RandomValueUtils.getRandomNumberOfLength(12);
+        } else if(borrowerType.equals(subjectTypeValues[2])){
+            full_name = RandomValueUtils.getRandomValueByValueType(ValueType.PERSON_FULL_NAME);
             inn = RandomValueUtils.getRandomNumberOfLength(12);
         }
     }

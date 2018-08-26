@@ -1,4 +1,4 @@
-package ru.sbrf.data.generator;
+package ru.sbrf.data.generator.data;
 
 import csvdata.builder.ValueType;
 import csvdata.builder.enums.DRPA.ClientType;
@@ -8,19 +8,24 @@ import static csvdata.builder.RandomValueUtils.getRandomNumberOfLength;
 import static csvdata.builder.RandomValueUtils.getRandomValueByValueType;
 
 @Data
-public class DRPASubject extends Subject {
+public class SubjectDRPA extends Subject {
 
     private String cust_id;
     private String doc_num;
 
-    public DRPASubject(String borrowerType) {
+    public SubjectDRPA(String borrowerType) {
         super(borrowerType);
         generateValues();
     }
 
-    public DRPASubject(SAPBOSubject subject){
+    public SubjectDRPA(SubjectSAPBO subject){
         super(subject);
         generateValues();
+        if(subject.getClientType().equals(csvdata.builder.enums.SAPBO.ClientType.LEGAL_ENTITY.toString())){
+            this.setClientType(ClientType.LEGAL_ENTITY.toString());
+        } else if(subject.getClientType().equals(csvdata.builder.enums.SAPBO.ClientType.BUSINESS_PERSON_ENTITY.toString())){
+            this.setClientType(ClientType.BUSINESS_PERSON_ENTITY.toString());
+        }
     }
 
     private void generateValues() {
@@ -34,6 +39,8 @@ public class DRPASubject extends Subject {
             return ClientType.LEGAL_ENTITY.toString();
         } else if(inputType.equals(subjectTypeValues[1])){
             return ClientType.BUSINESS_PERSON_ENTITY.toString();
+        }else if(inputType.equals(subjectTypeValues[2])){
+            return ClientType.PERSON_ENTITY.toString();
         }
         return null;
     }

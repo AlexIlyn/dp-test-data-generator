@@ -1,9 +1,10 @@
-package ru.sbrf.data.generator;
+package ru.sbrf.data.generator.builders;
 
 import csvdata.builder.CSV_TestDataBuilder;
 import csvdata.builder.enums.CaseSubType;
 import csvdata.builder.enums.CaseType;
 import lombok.Getter;
+import ru.sbrf.data.generator.data.SubjectSAPBO;
 
 import java.io.IOException;
 
@@ -11,15 +12,12 @@ import static csvdata.builder.ValueType.*;
 
 public class SapboClientsBuilder {
     public static final String SAPBO_CLIENTS_FILE_NAME = "1. Клиенты.csv";
-    public static final String DRPA_AGR_CRED_FILE_NAME = "AGR_CRED.csv";
-    public static final String DRPA_AGR_COLLAT_FILE_NAME = "AGR_COLLAT.csv";
-    public static final String DRPA_AGRCRED_A_FILE_NAME = "AGRCRED_A.csv";
     public static String[] borrowerTypeValues = new String[]{"ЮЛ", "ИП"};
 
     private CSV_TestDataBuilder dataBuilder;
 
     @Getter
-    private SAPBOSubject borrower;
+    private SubjectSAPBO borrower;
 
     public SapboClientsBuilder(){
         try {
@@ -29,14 +27,17 @@ public class SapboClientsBuilder {
         }
     }
 
-    public void build(SAPBOSubject borrower){
+    public void build(SubjectSAPBO borrower){
         this.borrower = borrower;
-        dataBuilder.buildRandomRecord();
-        dataBuilder.setLastRecordFieldsWithType(CRM_ID, borrower.getCrm_id());
-        dataBuilder.setLastRecordFieldsWithType(OGRN, borrower.getOgrn());
-        dataBuilder.setLastRecordFieldsWithType(FULL_NAME, borrower.getFull_name());
-        dataBuilder.setLastRecordFieldsWithType(INN, borrower.getInn());
-        dataBuilder.setLastRecordFieldsWithType(ORG_TYPE, borrower.getClientType());
+        dataBuilder.buildRandomRecord()
+                .setLastRecordFieldsWithType(CRM_ID, borrower.getCrm_id())
+                .setLastRecordFieldsWithType(INN, borrower.getInn())
+                .setLastRecordFieldsWithType(OGRN, borrower.getOgrn())
+                .setLastRecordFieldsWithType(FULL_NAME, borrower.getFull_name())
+                .setLastRecordFieldsWithType(ORG_TYPE, borrower.getClientType());
+    }
+
+    public void generate(){
         try {
             dataBuilder.generate();
         } catch (IOException e) {

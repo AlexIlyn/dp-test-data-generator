@@ -1,5 +1,6 @@
 package sample;
 
+import csvdata.builder.enums.DRPA.AgreementType;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -7,9 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import ru.sbrf.data.generator.*;
+import ru.sbrf.data.generator.builders.*;
+import ru.sbrf.data.generator.data.AgrCollatDRPA;
+import ru.sbrf.data.generator.data.AgrCredDRPA;
+import ru.sbrf.data.generator.data.SubjectDRPA;
+import ru.sbrf.data.generator.data.SubjectSAPBO;
 
-import static ru.sbrf.data.generator.SapboClientsBuilder.borrowerTypeValues;
+import static ru.sbrf.data.generator.builders.SapboClientsBuilder.borrowerTypeValues;
 
 public class Controller {
 
@@ -45,12 +50,33 @@ public class Controller {
             alert.setContentText("Данные сгенерированны.");
 
             alert.showAndWait();
-            SapboClientsBuilder sapboClientsBuilder = new SapboClientsBuilder();
-            DrpaClientsBuilder drpaClientsBuilder = new DrpaClientsBuilder();
-            SAPBOSubject borrower = new SAPBOSubject(borrowerType.getSelectionModel().getSelectedItem());
-            DRPASubject borrowerDRPA = new DRPASubject(borrower);
+            FileBundleBuilder fileBundleBuilder = new FileBundleBuilder();
+            fileBundleBuilder.prepareEntities(borrowerType.getSelectionModel().getSelectedItem(),
+                    pledgeGuarantorType.getSelectionModel().getSelectedItem(),
+                    collateralGuarantorType.getSelectionModel().getSelectedItem());
+            fileBundleBuilder.buildEntities();
+            fileBundleBuilder.generateFiles();
+            /*SapboClientsBuilder  sapboClientsBuilder  = new SapboClientsBuilder();
+            DrpaClientsBuilder   drpaClientsBuilder   = new DrpaClientsBuilder();
+            DrpaAgrCredBuilder   drpaAgrCredBuilder   = new DrpaAgrCredBuilder();
+            DrpaAgrCollatBuilder drpaAgrCollatBuilder = new DrpaAgrCollatBuilder();
+
+            SubjectSAPBO borrower = new SubjectSAPBO(borrowerType.getSelectionModel().getSelectedItem());
+            SubjectDRPA borrowerDRPA = new SubjectDRPA(borrower);
+            SubjectDRPA guarantorDRPA = new SubjectDRPA("ФЛ");
+            AgrCredDRPA agrCredDRPA = new AgrCredDRPA(borrowerDRPA);
+            AgrCollatDRPA agrCollatDRPA = new AgrCollatDRPA(guarantorDRPA, agrCredDRPA, AgreementType.PLEDGE);
+
             sapboClientsBuilder.build(borrower);
             drpaClientsBuilder.build(borrowerDRPA);
+            drpaClientsBuilder.build(guarantorDRPA);
+            drpaAgrCredBuilder.build(agrCredDRPA);
+            drpaAgrCollatBuilder.build(agrCollatDRPA);
+
+            sapboClientsBuilder.generate();
+            drpaClientsBuilder.generate();
+            drpaAgrCredBuilder.generate();
+            drpaAgrCollatBuilder.generate();*/
         });
     }
 
