@@ -1,0 +1,2 @@
+agr_cred_id;agr_collat_id;alloc_prvsn_mkt_rub;alloc_CAR_mkt_rub;alloc_CAR_bal_rub
+AGR_CRED_ID;AGR_COLLAT_ID;915943.7;915943.7;0
