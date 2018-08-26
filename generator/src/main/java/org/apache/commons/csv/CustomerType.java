@@ -1,0 +1,5 @@
+package org.apache.commons.csv;
+
+public enum CustomerType {
+	LEGAL_ENTITY_WITH_KIO, BUSINESS_PERSON_ENTITY_WITH_KIO, LEGAL_ENTITY_WITH_INN, BUSINESS_PERSON_ENTITY_WITH_INN
+}
