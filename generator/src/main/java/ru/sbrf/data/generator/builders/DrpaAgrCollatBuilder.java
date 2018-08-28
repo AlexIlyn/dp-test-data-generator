@@ -45,4 +45,9 @@ public class DrpaAgrCollatBuilder {
             System.out.println(e.getMessage());
         }
     }
+
+    public void cleanData(){
+        collatBuilder.cleanRecords();
+        linkBuilder.cleanRecords();
+    }
 }

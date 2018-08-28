@@ -44,4 +44,8 @@ public class SapboClientsBuilder {
             System.out.println(e.getMessage());
         }
     }
+
+    public void cleanData(){
+        dataBuilder.cleanRecords();
+    }
 }

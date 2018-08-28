@@ -201,7 +201,7 @@ public class CSV_TestDataBuilder {
 		return this;
 	}
 
-	public CSV_TestDataBuilder cleanRecords() throws IOException {
+	public CSV_TestDataBuilder cleanRecords() {
 		records.clear();
 		return this;
 	}

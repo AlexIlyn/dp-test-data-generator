@@ -1,6 +1,8 @@
 package sample;
 
 import csvdata.builder.enums.DRPA.AgreementType;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -42,41 +44,35 @@ public class Controller {
         initChoiceBox(borrowerType, borrowerTypeValues);
         initChoiceBox(pledgeGuarantorType, pledgeGuarantorTypeValues);
         initChoiceBox(collateralGuarantorType, collateralGuarantorTypeValues);
+        borrowerAggreements.setText("1");
+        borrowerAggreements.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    borrowerAggreements.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+                if (borrowerAggreements.getText().length() > 3) {
+                    String s = borrowerAggreements.getText().substring(0, 3);
+                    borrowerAggreements.setText(s);
+                }
+            }
+        });
         generateFilesButton.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
+            FileBundleBuilder fileBundleBuilder = new FileBundleBuilder();
+            fileBundleBuilder.prepareEntities(borrowerType.getSelectionModel().getSelectedItem(),
+                    pledgeGuarantorType.getSelectionModel().getSelectedItem(),
+                    collateralGuarantorType.getSelectionModel().getSelectedItem(),
+                    Integer.parseInt(borrowerAggreements.getText()));
+            fileBundleBuilder.buildEntities();
+            fileBundleBuilder.generateFiles();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Данные сгенерированны.");
 
             alert.showAndWait();
-            FileBundleBuilder fileBundleBuilder = new FileBundleBuilder();
-            fileBundleBuilder.prepareEntities(borrowerType.getSelectionModel().getSelectedItem(),
-                    pledgeGuarantorType.getSelectionModel().getSelectedItem(),
-                    collateralGuarantorType.getSelectionModel().getSelectedItem());
-            fileBundleBuilder.buildEntities();
-            fileBundleBuilder.generateFiles();
-            /*SapboClientsBuilder  sapboClientsBuilder  = new SapboClientsBuilder();
-            DrpaClientsBuilder   drpaClientsBuilder   = new DrpaClientsBuilder();
-            DrpaAgrCredBuilder   drpaAgrCredBuilder   = new DrpaAgrCredBuilder();
-            DrpaAgrCollatBuilder drpaAgrCollatBuilder = new DrpaAgrCollatBuilder();
-
-            SubjectSAPBO borrower = new SubjectSAPBO(borrowerType.getSelectionModel().getSelectedItem());
-            SubjectDRPA borrowerDRPA = new SubjectDRPA(borrower);
-            SubjectDRPA guarantorDRPA = new SubjectDRPA("ФЛ");
-            AgrCredDRPA agrCredDRPA = new AgrCredDRPA(borrowerDRPA);
-            AgrCollatDRPA agrCollatDRPA = new AgrCollatDRPA(guarantorDRPA, agrCredDRPA, AgreementType.PLEDGE);
-
-            sapboClientsBuilder.build(borrower);
-            drpaClientsBuilder.build(borrowerDRPA);
-            drpaClientsBuilder.build(guarantorDRPA);
-            drpaAgrCredBuilder.build(agrCredDRPA);
-            drpaAgrCollatBuilder.build(agrCollatDRPA);
-
-            sapboClientsBuilder.generate();
-            drpaClientsBuilder.generate();
-            drpaAgrCredBuilder.generate();
-            drpaAgrCollatBuilder.generate();*/
         });
     }
 

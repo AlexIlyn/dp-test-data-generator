@@ -41,4 +41,8 @@ public class DrpaAgrCredBuilder {
             System.out.println(e.getMessage());
         }
     }
+
+    public void cleanData(){
+        dataBuilder.cleanRecords();
+    }
 }

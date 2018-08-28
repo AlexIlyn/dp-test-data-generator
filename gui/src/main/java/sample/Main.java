@@ -15,6 +15,7 @@ public class Main extends Application {
         primaryStage.setTitle("DataPump - DataGenerator");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 
 

@@ -1,11 +1,13 @@
 package ru.sbrf.data.generator.builders;
 
 import csvdata.builder.enums.DRPA.AgreementType;
+import csvdata.builder.enums.SubjectType;
 import ru.sbrf.data.generator.data.AgrCollatDRPA;
 import ru.sbrf.data.generator.data.AgrCredDRPA;
 import ru.sbrf.data.generator.data.SubjectDRPA;
 import ru.sbrf.data.generator.data.SubjectSAPBO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileBundleBuilder {
@@ -16,18 +18,17 @@ public class FileBundleBuilder {
 
     SubjectSAPBO borrowerSapbo;
     SubjectDRPA borrowerDrpa;
-    AgrCredDRPA agrCredDRPA;
-    AgrCollatDRPA agrCollatPledge;
-    AgrCollatDRPA agrCollatCollateral;
-    AgrCollatDRPA agrCollatGuarantee;
-    //List<SubjectDRPA> guarantorsDrpa;
-    SubjectDRPA pledgeGuarantor;
-    SubjectDRPA collateralGuarantor;
-    SubjectDRPA guaranteeGuarantor;
+    List<AgrCredDRPA> agrCredsDRPA = new ArrayList<>();
+    List<AgrCollatDRPA> agrCollatsPledge = new ArrayList<>();
+    List<AgrCollatDRPA> agrCollatsCollateral = new ArrayList<>();
+    List<AgrCollatDRPA> agrCollatsGuarantee = new ArrayList<>();
+    List<SubjectDRPA> pledgeGuarantors = new ArrayList<>();
+    List<SubjectDRPA> collateralGuarantors = new ArrayList<>();
+    List<SubjectDRPA> guaranteeGuarantors = new ArrayList<>();
 
-    public void prepareEntities(String borrowerType, String pledgeGuarantorType, String collateralGuarantorType){
+    public void prepareEntities(String borrowerType, String pledgeGuarantorType, String collateralGuarantorType, int agrCredCount){
         prepareBorrower(borrowerType);
-        prepareAgrCred();
+        prepareAgrCred(agrCredCount);
         prepareAgrCollat(pledgeGuarantorType, collateralGuarantorType);
     }
 
@@ -42,6 +43,10 @@ public class FileBundleBuilder {
         drpaClientsBuilder.generate();
         drpaAgrCredBuilder.generate();
         drpaAgrCollatBuilder.generate();
+        sapboClientsBuilder.cleanData();
+        drpaClientsBuilder.cleanData();
+        drpaAgrCredBuilder.cleanData();
+        drpaAgrCollatBuilder.cleanData();
 
     }
 
@@ -55,29 +60,58 @@ public class FileBundleBuilder {
         drpaClientsBuilder.build(borrowerDrpa);
     }
 
-    private void prepareAgrCred(){
-        agrCredDRPA = new AgrCredDRPA(borrowerDrpa);
+    private void prepareAgrCred(int count){
+        for (int i = 0; i < count; i++) {
+            agrCredsDRPA.add(new AgrCredDRPA(borrowerDrpa));
+        }
     }
 
     private void buildAgrCred(){
-        drpaAgrCredBuilder.build(agrCredDRPA);
+        for (AgrCredDRPA agrCred : agrCredsDRPA){
+            drpaAgrCredBuilder.build(agrCred);
+        }
     }
 
     private void prepareAgrCollat(String pledgeGuarantorType, String collateralGuarantorType){
-        pledgeGuarantor = new SubjectDRPA(pledgeGuarantorType);
-        collateralGuarantor = new SubjectDRPA(collateralGuarantorType);
-        guaranteeGuarantor = new SubjectDRPA("ЮЛ");
-        agrCollatPledge = new AgrCollatDRPA(pledgeGuarantor, agrCredDRPA, AgreementType.PLEDGE);
-        agrCollatCollateral = new AgrCollatDRPA(collateralGuarantor, agrCredDRPA, AgreementType.COLLATERAL);
-        agrCollatGuarantee = new AgrCollatDRPA(guaranteeGuarantor, agrCredDRPA, AgreementType.GUARANTEE);
+        SubjectDRPA pledgeGuarantor;
+        SubjectDRPA guaranteeGuarantor;
+        SubjectDRPA collateralGuarantor;
+        for (AgrCredDRPA agrCred : agrCredsDRPA){
+            pledgeGuarantor = new SubjectDRPA(pledgeGuarantorType);
+            guaranteeGuarantor = new SubjectDRPA("ЮЛ");
+            pledgeGuarantors.add(pledgeGuarantor);
+            guaranteeGuarantors.add(guaranteeGuarantor);
+
+            agrCollatsPledge.add(new AgrCollatDRPA(pledgeGuarantor, agrCred, AgreementType.PLEDGE));
+            agrCollatsGuarantee.add(new AgrCollatDRPA(guaranteeGuarantor, agrCred, AgreementType.GUARANTEE));
+            if(collateralGuarantorType.equals(SubjectType.BORROWER.toString())){
+                collateralGuarantor = borrowerDrpa;
+            } else {
+                collateralGuarantor = new SubjectDRPA(collateralGuarantorType);
+                collateralGuarantors.add(collateralGuarantor);
+            }
+            agrCollatsCollateral.add(new AgrCollatDRPA(collateralGuarantor, agrCred, AgreementType.COLLATERAL));
+        }
     }
 
     private void buildAgrCollat(){
-        drpaClientsBuilder.build(pledgeGuarantor);
-        drpaClientsBuilder.build(collateralGuarantor);
-        drpaClientsBuilder.build(guaranteeGuarantor);
-        drpaAgrCollatBuilder.build(agrCollatPledge);
-        drpaAgrCollatBuilder.build(agrCollatCollateral);
-        drpaAgrCollatBuilder.build(agrCollatGuarantee);
+        for (SubjectDRPA subj : pledgeGuarantors){
+            drpaClientsBuilder.build(subj);
+        }
+        for (SubjectDRPA subj : guaranteeGuarantors){
+            drpaClientsBuilder.build(subj);
+        }
+        for (SubjectDRPA subj : collateralGuarantors){
+            drpaClientsBuilder.build(subj);
+        }
+        for (AgrCollatDRPA agr : agrCollatsPledge){
+            drpaAgrCollatBuilder.build(agr);
+        }
+        for (AgrCollatDRPA agr : agrCollatsGuarantee){
+            drpaAgrCollatBuilder.build(agr);
+        }
+        for (AgrCollatDRPA agr : agrCollatsCollateral){
+            drpaAgrCollatBuilder.build(agr);
+        }
     }
 }

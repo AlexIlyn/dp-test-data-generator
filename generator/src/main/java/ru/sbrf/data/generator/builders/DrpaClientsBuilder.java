@@ -48,4 +48,8 @@ public class DrpaClientsBuilder {
             System.out.println(e.getMessage());
         }
     }
+
+    public void cleanData(){
+        dataBuilder.cleanRecords();
+    }
 }

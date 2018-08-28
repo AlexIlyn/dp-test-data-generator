@@ -91,6 +91,7 @@ public class RandomValueUtils {
 	}
 
 	public static String getRandomValueByValueType(ValueType valueType) {
+		String result;
 		switch (valueType) {
 			case AGRNUM:
 				return getRandomIntInRange((int) Math.pow(10, 7), (int) Math.pow(10, 8) - 1) + "/" + getRandomIntInRange((int) Math.pow(10, 7), (int) Math.pow(10, 8) - 1);
@@ -122,9 +123,13 @@ public class RandomValueUtils {
 			case CUST_ID:
 				return Integer.toString(getRandomIntInRange(0, Integer.MAX_VALUE - 1));
 			case COMPANY_NAME:
-				return faker.company().name();
+				result = faker.company().name();
+				while (result.contains("ИП")){
+					result = faker.company().name();
+				}
+				return result;
 			case PERSON_FULL_NAME:
-				String result = "";
+				result = "";
 				while (result.split("[\\s]").length != 3){
 					result = faker.name().name();
 				}
